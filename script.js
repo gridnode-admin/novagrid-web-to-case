@@ -64,6 +64,14 @@ const salesforceLanguageMap = {
   en: "E"
 };
 
+// Salesforce Case Record Types
+const recordTypeMap = {
+  de: "012TG000000Qp5J",
+  en: "012TG000000Qp5J",
+  fr: "012TG000000Qp8X",
+  it: "012TG000000Qp6v"
+};
+
 // Minimum waiting time before submit
 const MIN_FORM_TIME_MS = 3000;
 
@@ -141,6 +149,34 @@ function setSalesforceLanguage() {
 
     debugLog(
       "❌ language-field NOT FOUND"
+    );
+  }
+}
+
+/**
+ * Sets Salesforce Case Record Type
+ * based on the current language
+ */
+function setRecordType() {
+
+  const recordTypeField =
+    document.getElementById("recordType");
+
+  if (recordTypeField) {
+
+    recordTypeField.value =
+      recordTypeMap[currentLanguage]
+      || recordTypeMap["de"];
+
+    debugLog(
+      "Assigned Record Type:",
+      recordTypeField.value
+    );
+
+  } else {
+
+    debugLog(
+      "❌ recordType field NOT FOUND"
     );
   }
 }
@@ -373,5 +409,6 @@ window.addEventListener("load", function () {
 
   // Initialize form
   setSalesforceLanguage();
+  setRecordType();
   applyTranslations();
 });
