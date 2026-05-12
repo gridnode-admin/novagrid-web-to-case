@@ -4,61 +4,56 @@
 
 // Translation texts used by the form UI
 const translations = {
+
   de: {
-    firstName: "Vorname",
-    lastName: "Nachname *",
-    email: "E-Mail *",
-    company: "Firma",
-    phone: "Telefon",
-    mobile: "Mobil",
-    street: "Strasse",
-    zip: "PLZ",
-    city: "Stadt",
-    country: "Land",
-    message: "Nachricht",
+    name: "Vollständiger Name *",
+    email: "E-Mail-Adresse *",
+    phone: "Telefonnummer *",
+    serial: "Solar-Log Seriennummer *",
+    serialHint: "Nur Zahlen erlaubt.",
+    subject: "Betreff *",
+    message: "Ihre Nachricht *",
     submit: "SENDEN",
-    hint: "Bitte beschreiben Sie Ihr Anliegen so genau wie möglich."
+    hint: "Bitte beschreiben Sie Ihr Anliegen so genau wie möglich.",
+    gdpr:
+      "ACHTUNG: Mit dem Absenden des Formulars bestätigen Sie ausdrücklich, dass Sie eine Kontaktaufnahme über die angegebenen Kontaktdaten wünschen."
   },
 
   fr: {
-    firstName: "Prénom",
-    lastName: "Nom *",
-    email: "E-mail *",
-    company: "Entreprise",
-    phone: "Téléphone",
-    mobile: "Mobile",
-    street: "Rue",
-    zip: "Code postal",
-    city: "Ville",
-    country: "Pays",
-    message: "Message",
+    name: "Nom complet *",
+    email: "Adresse e-mail *",
+    phone: "Numéro de téléphone *",
+    serial: "Numéro de série Solar-Log *",
+    serialHint: "Uniquement des chiffres autorisés.",
+    subject: "Sujet *",
+    message: "Votre message *",
     submit: "ENVOYER",
-    hint: "Veuillez décrire votre demande aussi précisément que possible."
+    hint: "Veuillez décrire votre demande aussi précisément que possible.",
+    gdpr:
+      "ATTENTION : En envoyant ce formulaire, vous confirmez expressément que vous souhaitez être contacté via les coordonnées indiquées."
   },
 
   it: {
-    firstName: "Nome",
-    lastName: "Cognome *",
-    email: "Email *",
-    company: "Azienda",
-    phone: "Telefono",
-    mobile: "Cellulare",
-    street: "Via",
-    zip: "CAP",
-    city: "Città",
-    country: "Paese",
-    message: "Messaggio",
+    name: "Nome completo *",
+    email: "Indirizzo e-mail *",
+    phone: "Numero di telefono *",
+    serial: "Numero di serie Solar-Log *",
+    serialHint: "Sono consentiti solo numeri.",
+    subject: "Oggetto *",
+    message: "Il vostro messaggio *",
     submit: "INVIA",
-    hint: "Si prega di descrivere la richiesta nel modo più preciso possibile."
+    hint: "Si prega di descrivere la richiesta nel modo più preciso possibile.",
+    gdpr:
+      "ATTENZIONE: Inviando il modulo confermate espressamente di desiderare un contatto tramite i dati indicati."
   }
 };
 
 // Redirect URLs after successful form submission
 const redirectUrls = {
-  de: "https://www.novagrid.ch/markttor-wir-haben-ihre-anfrage-erhalten",
-  en: "https://www.novagrid.ch/markttor-wir-haben-ihre-anfrage-erhalten",
-  fr: "https://www.novagrid.ch/portail-du-marche-nous-avons-bien-recu-votre-demande",
-  it: "https://www.novagrid.ch/portale-del-mercato-abbiamo-ricevuto-la-vostra-richiesta"
+  de: "https://www.novagrid.ch/wir-tauschen-wir-haben-ihre-anfrage-erhalten",
+  en: "https://www.novagrid.ch/wir-tauschen-wir-haben-ihre-anfrage-erhalten",
+  fr: "https://www.novagrid.ch/nous-procedons-a-lechange-nous-avons-bien-recu-votre-demande",
+  it: "https://www.novagrid.ch/effettuiamo-la-sostituzione-abbiamo-ricevuto-la-vostra-richiesta"
 };
 
 // Salesforce language mapping
@@ -69,7 +64,7 @@ const salesforceLanguageMap = {
   en: "E"
 };
 
-// Minimum waiting time before form submission
+// Minimum waiting time before submit
 const MIN_FORM_TIME_MS = 3000;
 
 // Enable/disable console logs
@@ -79,11 +74,8 @@ const DEBUG = true;
 // GLOBAL STATE
 // =========================
 
-// Timestamp when the form was loaded
 let formStartTime;
 
-// Current language of the form
-// Determined once during initialization
 let currentLanguage = "de";
 
 // =========================
@@ -91,13 +83,12 @@ let currentLanguage = "de";
 // =========================
 
 /**
- * Detects the current language from URL parameters
- * Example:
- * ?lang=fr
- * ?forceLang=it
+ * Detects current language from URL parameters
  */
 function getLanguage() {
-  const params = new URLSearchParams(window.location.search);
+
+  const params =
+    new URLSearchParams(window.location.search);
 
   return (
     params.get("forceLang")
@@ -107,9 +98,10 @@ function getLanguage() {
 }
 
 /**
- * Writes debug logs only if DEBUG is enabled
+ * Debug logging helper
  */
 function debugLog(...args) {
+
   if (DEBUG) {
     console.log(...args);
   }
@@ -120,40 +112,57 @@ function debugLog(...args) {
 // =========================
 
 /**
- * Sets the Salesforce language field
+ * Sets Salesforce language field
  */
 function setSalesforceLanguage() {
+
   const sfLang =
-    salesforceLanguageMap[currentLanguage] || "D";
+    salesforceLanguageMap[currentLanguage]
+    || "D";
 
   const field =
     document.getElementById("language-field");
 
   if (field) {
+
     field.value = sfLang;
 
-    debugLog("Detected language:", currentLanguage);
-    debugLog("Mapped Salesforce language:", sfLang);
+    debugLog(
+      "Detected language:",
+      currentLanguage
+    );
+
+    debugLog(
+      "Mapped Salesforce language:",
+      sfLang
+    );
+
   } else {
-    debugLog("❌ language-field NOT FOUND");
+
+    debugLog(
+      "❌ language-field NOT FOUND"
+    );
   }
 }
 
 /**
- * Sets the redirect URL before form submission
- * This is done during submit because iframes
- * can behave inconsistently otherwise
+ * Sets redirect URL before submit
  */
 function setRedirectUrl() {
+
   const retUrlField =
     document.getElementById("retURL");
 
   if (retUrlField) {
+
     retUrlField.value =
       redirectUrls[currentLanguage]
       || redirectUrls["de"];
 
-    debugLog("Final redirect URL:", retUrlField.value);
+    debugLog(
+      "Final redirect URL:",
+      retUrlField.value
+    );
   }
 }
 
@@ -162,26 +171,89 @@ function setRedirectUrl() {
 // =========================
 
 /**
- * Applies translations to the form UI
+ * Applies translations to UI
  */
 function applyTranslations() {
+
   const t =
     translations[currentLanguage]
     || translations["de"];
 
-  document.getElementById("label-firstName").innerText = t.firstName;
-  document.getElementById("label-lastName").innerText = t.lastName;
-  document.getElementById("label-email").innerText = t.email;
-  document.getElementById("label-company").innerText = t.company;
-  document.getElementById("label-phone").innerText = t.phone;
-  document.getElementById("label-mobile").innerText = t.mobile;
-  document.getElementById("label-street").innerText = t.street;
-  document.getElementById("label-zip").innerText = t.zip;
-  document.getElementById("label-city").innerText = t.city;
-  document.getElementById("label-country").innerText = t.country;
-  document.getElementById("label-message").innerText = t.message;
-  document.getElementById("submit-button").innerText = t.submit;
-  document.getElementById("form-hint").innerText = t.hint;
+  document.getElementById("label-name").innerText =
+    t.name;
+
+  document.getElementById("label-email").innerText =
+    t.email;
+
+  document.getElementById("label-phone").innerText =
+    t.phone;
+
+  document.getElementById("label-serial").innerText =
+    t.serial;
+
+  document.getElementById("label-subject").innerText =
+    t.subject;
+
+  document.getElementById("label-message").innerText =
+    t.message;
+
+  document.getElementById("submit-button").innerText =
+    t.submit;
+
+  document.getElementById("form-hint").innerText =
+    t.hint;
+
+  // Serial number hint
+  const serialHint =
+    document.querySelector(".form-hint");
+
+  if (serialHint) {
+    serialHint.innerText = t.serialHint;
+  }
+
+  // GDPR text
+  const gdprNotice =
+    document.getElementById("gdpr-notice");
+
+  if (gdprNotice) {
+    gdprNotice.innerText = t.gdpr;
+  }
+}
+
+// =========================
+// VALIDATION
+// =========================
+
+/**
+ * Validates Solar-Log serial number
+ * Only numbers are allowed
+ */
+function validateSerialNumber() {
+
+  const serialField =
+    document.getElementById("serial-number");
+
+  if (!serialField) {
+    return true;
+  }
+
+  const serial =
+    serialField.value.trim();
+
+  const numericRegex = /^[0-9]+$/;
+
+  if (!numericRegex.test(serial)) {
+
+    alert(
+      "Die Solar-Log Seriennummer darf nur Zahlen enthalten."
+    );
+
+    serialField.focus();
+
+    return false;
+  }
+
+  return true;
 }
 
 // =========================
@@ -189,18 +261,12 @@ function applyTranslations() {
 // =========================
 
 /**
- * Runs before the form is submitted
+ * Runs before form submission
  */
 function beforeSubmit() {
 
-  // Ensure redirect URL is set correctly
+  // Set redirect URL
   setRedirectUrl();
-
-  const company =
-    document.getElementById("company");
-
-  const lastName =
-    document.getElementById("last_name");
 
   const honeypot =
     document.getElementById("website");
@@ -209,10 +275,13 @@ function beforeSubmit() {
     document.getElementById("description");
 
   // =========================
-  // Anti-spam honeypot check
+  // Honeypot anti-spam
   // =========================
 
-  if (honeypot && honeypot.value.trim() !== "") {
+  if (
+    honeypot
+    && honeypot.value.trim() !== ""
+  ) {
     return false;
   }
 
@@ -224,10 +293,19 @@ function beforeSubmit() {
     Date.now() - formStartTime
     < MIN_FORM_TIME_MS
   ) {
+
     alert(
       "Bitte warten Sie einen Moment, bevor Sie das Formular absenden."
     );
 
+    return false;
+  }
+
+  // =========================
+  // Validate serial number
+  // =========================
+
+  if (!validateSerialNumber()) {
     return false;
   }
 
@@ -251,21 +329,6 @@ function beforeSubmit() {
   }
 
   // =========================
-  // Fallback company logic
-  // =========================
-
-  // If company is empty,
-  // use last name instead
-  if (
-    company
-    && lastName
-    && company.value.trim() === ""
-  ) {
-    company.value =
-      lastName.value.trim();
-  }
-
-  // =========================
   // Build structured message
   // =========================
 
@@ -277,10 +340,10 @@ ${messageField.value}
 
 ------------------------
 Kontaktinformationen:
-Name: ${lastName?.value || ""}
-Firma: ${company?.value || ""}
+Name: ${document.getElementById("name")?.value || ""}
 Email: ${document.getElementById("email")?.value || ""}
 Telefon: ${document.getElementById("phone")?.value || ""}
+Solar-Log Seriennummer: ${document.getElementById("serial-number")?.value || ""}
 `;
 
     messageField.value =
@@ -296,13 +359,17 @@ Telefon: ${document.getElementById("phone")?.value || ""}
 
 window.addEventListener("load", function () {
 
-  // Save form load timestamp
+  // Save load timestamp
   formStartTime = Date.now();
 
   // Detect language once
-  currentLanguage = getLanguage();
+  currentLanguage =
+    getLanguage();
 
-  debugLog("Cached language:", currentLanguage);
+  debugLog(
+    "Cached language:",
+    currentLanguage
+  );
 
   // Initialize form
   setSalesforceLanguage();

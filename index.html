@@ -17,83 +17,190 @@
 </head>
 
 <body>
-  <div class="page-wrapper">
-    <div class="form-container">
-      <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00D68000004Expa"
-        method="POST" onsubmit="return beforeSubmit()" target="_top">
 
-        <input type="hidden" name="oid" value="00D68000004Expa">
-        <input type="hidden" id="retURL" name="retURL"
+  <div class="page-wrapper">
+
+    <div class="form-container">
+
+      <form action="https://webto.salesforce.com/servlet/servlet.WebToCase?encoding=UTF-8&orgId=00D68000004Expa"
+        method="POST"
+        onsubmit="return beforeSubmit()"
+        target="_top">
+
+        <!-- ========================= -->
+        <!-- Salesforce Hidden Fields -->
+        <!-- ========================= -->
+
+        <input type="hidden" name="orgid" value="00D68000004Expa">
+
+        <input type="hidden"
+          id="retURL"
+          name="retURL"
           value="">
-        <input type="hidden" name="lead_source" value="Website">
-        <input type="hidden" name="recordType" value="012TG0000014shB">
-        <input type="hidden" name="currency" value="CHF">
-        <input type="hidden" name="status" value="Neu">
-        <input type="hidden" name="industry" value="Energy">
-        <input type="hidden" name="rating" value="Warm">
-        <input type="hidden" id="language-field" name="00NTG000000Zj5W" value="D">
+
+        <!-- Correct Case Record Type -->
+        <input type="hidden"
+          name="recordType"
+          value="012TG000000Qp5J">
+
+        <!-- Required Case Fields -->
+        <input type="hidden"
+          name="status"
+          value="Neu">
+
+        <input type="hidden"
+          name="origin"
+          value="Website">
+
+        <input type="hidden"
+          name="currencyIsoCode"
+          value="CHF">
+
+        <!-- Language Field -->
+        <input type="hidden"
+          id="language-field"
+          name="00NTG000000Zj5W"
+          value="D">
+
+        <!-- ========================= -->
+        <!-- Honeypot Anti-Spam Field -->
+        <!-- ========================= -->
 
         <div class="hp-field" aria-hidden="true">
-          <label for="website">Website</label>
-          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+
+          <label for="website">
+            Website
+          </label>
+
+          <input id="website"
+            name="website"
+            type="text"
+            tabindex="-1"
+            autocomplete="off">
+
         </div>
 
-        <!-- DEBUG
-        <input type="hidden" name="debug" value="1">
-        <input type="hidden" name="debugEmail" value="systemadministrator@novagrid.ch">
-        -->
-        <label id="label-firstName">Vorname</label>
-        <input id="first_name" name="first_name">
+        <!-- ========================= -->
+        <!-- Contact Information -->
+        <!-- ========================= -->
 
-        <label id="label-lastName">Nachname *</label>
-        <input id="last_name" name="last_name" required>
+        <label id="label-name" for="name">
+          Vollständiger Name *
+        </label>
 
-        <label id="label-email">E-Mail *</label>
-        <input id="email" name="email" type="email" required>
+        <input id="name"
+          name="name"
+          maxlength="80"
+          required>
 
-        <label id="label-company">Firma</label>
-        <input id="company" name="company">
+        <label id="label-email" for="email">
+          E-Mail-Adresse *
+        </label>
 
-        <label id="label-phone">Telefon</label>
-        <input id="phone" name="phone">
+        <input id="email"
+          name="email"
+          type="email"
+          maxlength="80"
+          required>
 
-        <label id="label-mobile">Mobil</label>
-        <input id="mobile" name="mobile">
+        <label id="label-phone" for="phone">
+          Telefonnummer *
+        </label>
 
-        <label id="label-street">Strasse</label>
-        <input id="street" name="street">
+        <input id="phone"
+          name="phone"
+          maxlength="40"
+          required>
 
-        <label id="label-zip">PLZ</label>
-        <input id="zip" name="zip">
+        <!-- ========================= -->
+        <!-- Solar-Log Serial Number -->
+        <!-- ========================= -->
 
-        <label id="label-city">Stadt</label>
-        <input id="city" name="city">
+        <label id="label-serial" for="serial-number">
+          Solar-Log Seriennummer *
+        </label>
 
-        <label id="label-country">Land</label>
-        <select id="country" name="country_code">
-          <option value="CH" selected>Schweiz</option>
-          <option value="DE">Deutschland</option>
-          <option value="AT">Österreich</option>
-          <option value="LI">Liechtenstein</option>
-        </select>
+        <input id="serial-number"
+          name="Solar_Log_Seriennummer__c"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]+"
+          maxlength="20"
+          required>
 
-        <label id="label-message" for="description">Nachricht</label>
-        <textarea id="description" name="description" rows="5"
-          style="width:100%; padding:8px; border:1px solid #dcdcdc; border-radius:4px;" placeholder="Ihre Nachricht..."
-          maxlength="1000" required></textarea>
+        <small class="form-hint">
+          Nur Zahlen erlaubt.
+        </small>
+
+        <!-- ========================= -->
+        <!-- Subject -->
+        <!-- ========================= -->
+
+        <label id="label-subject" for="subject">
+          Betreff *
+        </label>
+
+        <input id="subject"
+          name="subject"
+          maxlength="80"
+          required>
+
+        <!-- ========================= -->
+        <!-- Message -->
+        <!-- ========================= -->
+
+        <label id="label-message" for="description">
+          Ihre Nachricht *
+        </label>
+
+        <textarea id="description"
+          name="description"
+          rows="5"
+          maxlength="5000"
+          required></textarea>
 
         <small id="form-hint" class="form-hint">
           Bitte beschreiben Sie Ihr Anliegen so genau wie möglich.
         </small>
 
+        <!-- ========================= -->
         <!-- reCAPTCHA -->
-        <div class="g-recaptcha" data-sitekey="6LeBW84sAAAAAK-GP1HY6iJwhgF2y1GVpH-MwhZR"></div>
+        <!-- ========================= -->
 
-        <button id="submit-button" type="submit">SENDEN</button>
+        <div class="g-recaptcha"
+          data-sitekey="6LeBW84sAAAAAK-GP1HY6iJwhgF2y1GVpH-MwhZR">
+        </div>
+
+        <!-- ========================= -->
+        <!-- Submit -->
+        <!-- ========================= -->
+
+        <button id="submit-button"
+          type="submit">
+
+          SENDEN
+
+        </button>
 
       </form>
+
     </div>
+
   </div>
+
+  <!-- ========================= -->
+  <!-- GDPR / Contact Notice -->
+  <!-- ========================= -->
+
+  <p class="small"
+    style="padding: 20px; text-align: center; color: #666; font-size: 0.8rem;">
+
+    ACHTUNG:
+    Mit dem Absenden des Formulars bestätigen Sie ausdrücklich,
+    dass Sie eine Kontaktaufnahme über die angegebenen
+    Kontaktdaten wünschen.
+
+  </p>
 
 </body>
 
