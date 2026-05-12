@@ -1,1 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
 
+<head>
+  <meta charset="UTF-8">
+  <title>Kontaktformular</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <!-- JS -->
+  <script src="script.js" defer></script>
+
+</head>
+
+<body>
+  <div class="page-wrapper">
+    <div class="form-container">
+      <form action="https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00D68000004Expa"
+        method="POST" onsubmit="return beforeSubmit()" target="_top">
+
+        <input type="hidden" name="oid" value="00D68000004Expa">
+        <input type="hidden" name="retURL"
+          value="https://www.novagrid.ch/temp/preview_cm_previewfile.htm?tid=0.20850600%201743513083">
+        <input type="hidden" name="lead_source" value="Website">
+        <input type="hidden" name="recordType" value="012TG0000014shB">
+        <input type="hidden" name="currency" value="CHF">
+        <input type="hidden" name="status" value="Neu">
+        <input type="hidden" name="industry" value="Energy">
+        <input type="hidden" name="rating" value="Warm">
+        <input type="hidden" id="language-field" name="00NTG000000Zj5W" value="D">
+
+        <div class="hp-field" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <!-- DEBUG -->
+        <input type="hidden" name="debug" value="1">
+        <input type="hidden" name="debugEmail" value="systemadministrator@novagrid.ch">
+
+        <label id="label-firstName">Vorname</label>
+        <input id="first_name" name="first_name">
+
+        <label id="label-lastName">Nachname *</label>
+        <input id="last_name" name="last_name" required>
+
+        <label id="label-email">E-Mail *</label>
+        <input id="email" name="email" type="email" required>
+
+        <label id="label-company">Firma</label>
+        <input id="company" name="company">
+
+        <label id="label-phone">Telefon</label>
+        <input id="phone" name="phone">
+
+        <label id="label-mobile">Mobil</label>
+        <input id="mobile" name="mobile">
+
+        <label id="label-street">Strasse</label>
+        <input id="street" name="street">
+
+        <label id="label-zip">PLZ</label>
+        <input id="zip" name="zip">
+
+        <label id="label-city">Stadt</label>
+        <input id="city" name="city">
+
+        <label id="label-country">Land</label>
+        <select id="country" name="country_code">
+          <option value="CH" selected>Schweiz</option>
+          <option value="DE">Deutschland</option>
+          <option value="AT">Österreich</option>
+          <option value="LI">Liechtenstein</option>
+        </select>
+
+        <label id="label-message" for="description">Nachricht</label>
+        <textarea id="description" name="description" rows="5"
+          style="width:100%; padding:8px; border:1px solid #dcdcdc; border-radius:4px;" placeholder="Ihre Nachricht..."
+          maxlength="1000" required></textarea>
+
+        <small id="form-hint" class="form-hint">
+          Bitte beschreiben Sie Ihr Anliegen so genau wie möglich.
+        </small>
+
+        <!-- reCAPTCHA -->
+        <div class="g-recaptcha" data-sitekey="6LeBW84sAAAAAK-GP1HY6iJwhgF2y1GVpH-MwhZR"></div>
+
+        <button id="submit-button" type="submit">SENDEN</button>
+
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>
