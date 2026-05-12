@@ -8,6 +8,7 @@ const translations = {
   de: {
     name: "Vollständiger Name *",
     email: "E-Mail-Adresse *",
+    company: "Firma",
     phone: "Telefonnummer *",
     serial: "Solar-Log Seriennummer *",
     serialHint: "Nur Zahlen erlaubt.",
@@ -22,6 +23,7 @@ const translations = {
   fr: {
     name: "Nom complet *",
     email: "Adresse e-mail *",
+    company: "Entreprise",
     phone: "Numéro de téléphone *",
     serial: "Numéro de série Solar-Log *",
     serialHint: "Uniquement des chiffres autorisés.",
@@ -36,6 +38,7 @@ const translations = {
   it: {
     name: "Nome completo *",
     email: "Indirizzo e-mail *",
+    company: "Azienda",
     phone: "Numero di telefono *",
     serial: "Numero di serie Solar-Log *",
     serialHint: "Sono consentiti solo numeri.",
@@ -221,6 +224,9 @@ function applyTranslations() {
   document.getElementById("label-email").innerText =
     t.email;
 
+  document.getElementById("label-company").innerText =
+  t.company;
+
   document.getElementById("label-phone").innerText =
     t.phone;
 
@@ -381,6 +387,7 @@ ${messageField.value}
 Kontaktinformationen:
 Name: ${document.getElementById("name")?.value || ""}
 Email: ${document.getElementById("email")?.value || ""}
+Firma: ${document.getElementById("company")?.value || ""}
 Telefon: ${document.getElementById("phone")?.value || ""}
 Solar-Log Seriennummer: ${document.getElementById("serial-number")?.value || ""}
 `;
