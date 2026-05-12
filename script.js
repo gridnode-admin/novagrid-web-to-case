@@ -303,6 +303,9 @@ function beforeSubmit() {
 
   // Set redirect URL
   setRedirectUrl();
+  // Set record type
+  setRecordType();
+
 
   const honeypot =
     document.getElementById("website");
